@@ -1,15 +1,17 @@
 package main
 
-import "fmt"
+import (
+	_ "carSearch/docs"
+	"carSearch/internal/handler/http"
+	"github.com/gofiber/fiber/v2"
+	"log"
+)
 
 func main() {
-	a := 1
-	b := 2
-	fmt.Println(a + b)
-	c := add(a, b)
-	fmt.Println("Hello, World!!", c)
-}
+	app := fiber.New()
+	api := app.Group("/api")
+	// Routes
+	http.NewHelpHandler().Route(api)
 
-func add(a int, b int) int {
-	return a + b
+	log.Fatal(app.Listen(":8000"))
 }

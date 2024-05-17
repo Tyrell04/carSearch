@@ -17,7 +17,7 @@ FROM base AS dev
 WORKDIR /app
 
 # Hot reloading mod
-RUN go install github.com/cosmtrek/air@latest && go install github.com/go-delve/delve/cmd/dlv@latest
+RUN go install github.com/cosmtrek/air@latest && go install github.com/go-delve/delve/cmd/dlv@latest && go install github.com/swaggo/swag/cmd/swag@latest
 EXPOSE 8000
 EXPOSE 2345
 
