@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  carsearch_api:
+    container_name: carsearch_api
+    build:
+      context: container
+      dockerfile: air.Dockerfile
+      target: dev
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    networks:
+      - carsearch
+    ports:
+      - 8000:8000
+      - 2345:2345
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: carsearch
+    ports:
+      - 5432:5432
+    networks:
+      - carsearch
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+    postgres:
+
+networks:
+  carsearch:
+    name: carsearch
