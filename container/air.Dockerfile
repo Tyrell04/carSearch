@@ -17,7 +17,7 @@ FROM base AS dev
 WORKDIR /app
 
 # Hot reloading mod
-RUN go install github.com/cosmtrek/air@latest && go install github.com/go-delve/delve/cmd/dlv@latest && go install github.com/swaggo/swag/cmd/swag@latest
+RUN go install github.com/cosmtrek/air@latest && go install github.com/go-delve/delve/cmd/dlv@latest && go install github.com/swaggo/swag/cmd/swag@latest && go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 EXPOSE 8000
 EXPOSE 2345
 

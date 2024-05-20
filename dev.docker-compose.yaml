@@ -16,26 +16,27 @@ services:
       - 8000:8000
       - 2345:2345
   postgres:
-    container_name: postgres
+    container_name: database
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: carsearch
+      POSTGRES_DB: postgres
+
     ports:
       - 5432:5432
     networks:
       - carsearch
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U database"]
       interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
 
 volumes:
-    postgres:
+    database:
 
 networks:
   carsearch:

@@ -1,4 +1,35 @@
+definitions:
+  http.Car:
+    properties:
+      hsn:
+        type: string
+      manufacturer:
+        type: string
+      name:
+        type: string
+      tsn:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /api/car:
+    post:
+      consumes:
+      - application/json
+      description: Analyze a text query
+      parameters:
+      - description: Car object
+        in: body
+        name: Car
+        required: true
+        schema:
+          $ref: '#/definitions/http.Car'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - analyze
 swagger: "2.0"
