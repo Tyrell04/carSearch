@@ -35,10 +35,10 @@ func main() {
 	manuRepo := postgres.NewManufacturerRepository(db.DB)
 	// Service
 	carService := service.NewCarService(carRepo, manuRepo)
-	manufactuerService := service.NewManufactureService(manuRepo)
+	manufacturerService := service.NewManufactureService(manuRepo)
 	// Routes
 	carHandler := http.NewCarHandler(carService)
-	manufactureHandler := http.NewManufactureHandler(manufactuerService)
+	manufactureHandler := http.NewManufactureHandler(manufacturerService)
 
 	http.NewHelpHandler().Route(api)
 	carHandler.Route(api)
