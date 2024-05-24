@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/car": {
             "post": {
-                "description": "Analyze a text query",
+                "description": "Create a new car",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,7 +25,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "analyze"
+                    "car"
                 ],
                 "parameters": [
                     {
@@ -36,6 +36,71 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/http.Car"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/car/{hsn}": {
+            "get": {
+                "description": "Get car by hsn",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "manufacturer"
+                ],
+                "summary": "Get car by hsn",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "hsn",
+                        "name": "hsn",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/car/{hsn}/{tsn}": {
+            "get": {
+                "description": "Get car by hsn and tsn",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Get car by hsn and tsn",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "hsn",
+                        "name": "hsn",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tsn",
+                        "name": "tsn",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

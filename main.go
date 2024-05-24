@@ -18,7 +18,7 @@ func main() {
 	api := app.Group("/api")
 
 	// Get DB
-	database := database.NewDatabase(&config.Config{
+	db := database.NewDatabase(&config.Config{
 		Database: config.Database{
 			Host:     "postgres",
 			Port:     5432,
@@ -28,18 +28,21 @@ func main() {
 		},
 	})
 
-	defer database.Close()
+	defer db.Close()
 
 	//Repository
-	carRepo := postgres.NewCarRepository(database.DB)
-	manuRepo := postgres.NewManufacturerRepository(database.DB)
+	carRepo := postgres.NewCarRepository(db.DB)
+	manuRepo := postgres.NewManufacturerRepository(db.DB)
 	// Service
 	carService := service.NewCarService(carRepo, manuRepo)
+	manufactuerService := service.NewManufactureService(manuRepo)
 	// Routes
 	carHandler := http.NewCarHandler(carService)
+	manufactureHandler := http.NewManufactureHandler(manufactuerService)
 
 	http.NewHelpHandler().Route(api)
 	carHandler.Route(api)
+	manufactureHandler.Route(api)
 
 	log.Fatal(app.Listen(":8000"))
 }

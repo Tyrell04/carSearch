@@ -17,7 +17,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Analyze a text query
+      description: Create a new car
       parameters:
       - description: Car object
         in: body
@@ -31,5 +31,48 @@ paths:
         "200":
           description: OK
       tags:
-      - analyze
+      - car
+  /api/car/{hsn}:
+    get:
+      consumes:
+      - application/json
+      description: Get car by hsn
+      parameters:
+      - description: hsn
+        in: path
+        name: hsn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get car by hsn
+      tags:
+      - manufacturer
+  /api/car/{hsn}/{tsn}:
+    get:
+      consumes:
+      - application/json
+      description: Get car by hsn and tsn
+      parameters:
+      - description: hsn
+        in: path
+        name: hsn
+        required: true
+        type: string
+      - description: tsn
+        in: path
+        name: tsn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get car by hsn and tsn
+      tags:
+      - car
 swagger: "2.0"

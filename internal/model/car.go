@@ -4,6 +4,7 @@ type Car struct {
 	ID             int
 	Name           string
 	Tsn            string
+	Hsn            string
 	ManufacturerID int
 }
 

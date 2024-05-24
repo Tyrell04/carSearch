@@ -12,6 +12,6 @@ func NewHelpHandler() *HelpHandler {
 	return &HelpHandler{}
 }
 
-func (h *HelpHandler) Route(api fiber.Router) {
+func (handler *HelpHandler) Route(api fiber.Router) {
 	api.Get("/swagger/*", swagger.HandlerDefault) // default
 }
