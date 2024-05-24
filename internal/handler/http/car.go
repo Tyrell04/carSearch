@@ -4,10 +4,12 @@ import (
 	"carSearch/internal/exception"
 	"carSearch/internal/models"
 	"github.com/gofiber/fiber/v2"
+	"mime/multipart"
 )
 
 type CarService interface {
 	Create(car *models.CarCreate) error
+	CreateFromCSV(file *multipart.FileHeader) error
 	ByHsnTsn(hsn, tsn string) (*models.Car, error)
 }
 
@@ -29,6 +31,7 @@ func NewCarHandler(carService CarService) *car {
 func (handler *car) Route(api fiber.Router) {
 	api.Post("/car", handler.Create)
 	api.Get("/car/:hsn/:tsn", handler.ByHsnTsn)
+	api.Post("/car/csv", handler.CreateFromCSV)
 }
 
 // Create
@@ -79,4 +82,29 @@ func (handler *car) ByHsnTsn(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(car)
+}
+
+// CreateFromCSV
+// @Summary Create cars from CSV
+// @Description Create cars from CSV
+// @Tags car
+// @Accept json
+// @Produce json
+// @Param file formData file true "CSV file"
+// @Success 200
+// @Router /api/car/csv [post]
+func (handler *car) CreateFromCSV(c *fiber.Ctx) error {
+	file, err := c.FormFile("file")
+	if err != nil {
+		exception.Panic(err)
+	}
+
+	err = handler.carService.CreateFromCSV(file)
+
+	if err != nil {
+		exception.Panic(err)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Cars created successfully"})
+
 }

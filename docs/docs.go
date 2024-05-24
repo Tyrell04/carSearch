@@ -45,6 +45,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/car/csv": {
+            "post": {
+                "description": "Create cars from CSV",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Create cars from CSV",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "CSV file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/car/{hsn}": {
             "get": {
                 "description": "Get car by hsn",

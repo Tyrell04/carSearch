@@ -75,4 +75,23 @@ paths:
       summary: Get car by hsn and tsn
       tags:
       - car
+  /api/car/csv:
+    post:
+      consumes:
+      - application/json
+      description: Create cars from CSV
+      parameters:
+      - description: CSV file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create cars from CSV
+      tags:
+      - car
 swagger: "2.0"
