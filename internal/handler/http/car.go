@@ -1,13 +1,14 @@
 package http
 
 import (
-	"carSearch/internal/model"
+	"carSearch/internal/exception"
+	"carSearch/internal/models"
 	"github.com/gofiber/fiber/v2"
 )
 
 type CarService interface {
-	Create(car *model.CarCreate) error
-	ByHsnTsn(hsn, tsn string) (*model.Car, error)
+	Create(car *models.CarCreate) error
+	ByHsnTsn(hsn, tsn string) (*models.Car, error)
 }
 
 type car struct {
@@ -42,17 +43,17 @@ func (handler *car) Route(api fiber.Router) {
 func (handler *car) Create(c *fiber.Ctx) error {
 	car := new(Car)
 	if err := c.BodyParser(car); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		exception.Panic(err)
 	}
 
-	err := handler.carService.Create(&model.CarCreate{
+	err := handler.carService.Create(&models.CarCreate{
 		Name:         car.Name,
 		Hsn:          car.Hsn,
 		Tsn:          car.Tsn,
 		Manufacturer: car.Manufacturer,
 	})
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		exception.Panic(err)
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Car created successfully"})
@@ -74,7 +75,7 @@ func (handler *car) ByHsnTsn(c *fiber.Ctx) error {
 
 	car, err := handler.carService.ByHsnTsn(hsn, tsn)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		exception.Panic(err)
 	}
 
 	return c.Status(fiber.StatusOK).JSON(car)

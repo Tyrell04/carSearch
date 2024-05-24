@@ -1,10 +1,10 @@
 package service
 
-import "carSearch/internal/model"
+import "carSearch/internal/models"
 
 type ManufacturerRepository interface {
-	Create(manufacturer *model.Manufacturer) (int, error)
-	GetByHsn(hsn string) (*model.Manufacturer, error)
+	Create(manufacturer *models.Manufacturer) (int, error)
+	GetByHsn(hsn string) (*models.Manufacturer, error)
 }
 
 type manufactuerService struct {
@@ -15,7 +15,7 @@ func NewManufactureService(manufacturerRepository ManufacturerRepository) *manuf
 	return &manufactuerService{manufacturerRepository}
 }
 
-func (service *manufactuerService) GetByHsn(hsn string) (*model.Manufacturer, error) {
+func (service *manufactuerService) GetByHsn(hsn string) (*models.Manufacturer, error) {
 	manufacturer, err := service.ManufacturerRepository.GetByHsn(hsn)
 	if err != nil {
 		return nil, err

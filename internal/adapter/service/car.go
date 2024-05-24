@@ -1,10 +1,10 @@
 package service
 
-import "carSearch/internal/model"
+import "carSearch/internal/models"
 
 type CarRepository interface {
-	Create(car *model.Car) error
-	ByHsnTsn(hsn, tsn string) (*model.Car, error)
+	Create(car *models.Car) error
+	ByHsnTsn(hsn, tsn string) (*models.Car, error)
 }
 
 type carService struct {
@@ -16,18 +16,18 @@ func NewCarService(repo CarRepository, manuRepo ManufacturerRepository) *carServ
 	return &carService{repo, manuRepo}
 }
 
-func (service *carService) Create(car *model.CarCreate) error {
+func (service *carService) Create(car *models.CarCreate) error {
 	manufacturer, err := service.ManufacturerRepository.GetByHsn(car.Hsn)
 	if err != nil {
-		id, err := service.ManufacturerRepository.Create(&model.Manufacturer{Hsn: car.Hsn, Name: car.Manufacturer})
+		id, err := service.ManufacturerRepository.Create(&models.Manufacturer{Hsn: car.Hsn, Name: car.Manufacturer})
 		if err != nil {
 			return err
 		}
-		manufacturer = &model.Manufacturer{ID: id, Hsn: car.Hsn, Name: car.Manufacturer}
+		manufacturer = &models.Manufacturer{ID: id, Hsn: car.Hsn, Name: car.Manufacturer}
 	}
-	return service.CarRepository.Create(&model.Car{Name: car.Name, Tsn: car.Tsn, ManufacturerID: manufacturer.ID})
+	return service.CarRepository.Create(&models.Car{Name: car.Name, Tsn: car.Tsn, ManufacturerID: manufacturer.ID})
 }
 
-func (service *carService) ByHsnTsn(hsn, tsn string) (*model.Car, error) {
+func (service *carService) ByHsnTsn(hsn, tsn string) (*models.Car, error) {
 	return service.CarRepository.ByHsnTsn(hsn, tsn)
 }

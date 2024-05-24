@@ -5,16 +5,23 @@ import (
 	_ "carSearch/docs"
 	"carSearch/internal/adapter/database"
 	"carSearch/internal/adapter/service"
+	"carSearch/internal/exception"
 	"carSearch/internal/handler/http"
 	"carSearch/internal/repositories/postgres"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"log"
 )
 
 func main() {
 
 	// Fiber instance
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: exception.ErrorHandler,
+		Prefork:      false,
+	})
+	app.Use(recover.New())
+
 	api := app.Group("/api")
 
 	// Get DB

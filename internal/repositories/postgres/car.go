@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"carSearch/internal/model"
+	"carSearch/internal/models"
 	"database/sql"
 )
 
@@ -13,7 +13,7 @@ func NewCarRepository(db *sql.DB) *carRepository {
 	return &carRepository{db}
 }
 
-func (repository *carRepository) Create(car *model.Car) error {
+func (repository *carRepository) Create(car *models.Car) error {
 	_, err := repository.db.Exec("INSERT INTO cars (name, tsn, manufacturer_id) VALUES ($1, $2, $3)", car.Name, car.Tsn, car.ManufacturerID)
 	if err != nil {
 		return err
@@ -21,8 +21,8 @@ func (repository *carRepository) Create(car *model.Car) error {
 	return nil
 }
 
-func (repository *carRepository) ByHsnTsn(hsn, tsn string) (*model.Car, error) {
-	car := &model.Car{}
+func (repository *carRepository) ByHsnTsn(hsn, tsn string) (*models.Car, error) {
+	car := &models.Car{}
 
 	err := repository.db.QueryRow("SELECT id, hsn FROM manufacturer WHERE hsn = $1", hsn).Scan(&car.ManufacturerID, &car.Hsn)
 	if err != nil {
