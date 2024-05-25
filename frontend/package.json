@@ -1,0 +1,21 @@
+{
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@picocss/pico": "^2.0.6",
+		"preact": "^10.20.0",
+		"preact-iso": "^2.6.2",
+		"preact-render-to-string": "^6.5.2",
+		"sass": "^1.77.2"
+	},
+	"devDependencies": {
+		"@preact/preset-vite": "^2.8.2",
+		"typescript": "^5.4.5",
+		"vite": "^5.2.2"
+	}
+}
