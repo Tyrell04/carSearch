@@ -1,51 +1,45 @@
 
-export interface TableRowData {
-    tfoot?: boolean;
-    columns: string[];
-}
 
-export interface TableProps {
-    data: TableRowData[];
-    thead?: string[];
-}
-
-
-export function Table({ data, thead, }: TableProps) {
+export function Table({ children }) {
     return (
         <table>
-            <thead>
-            <tr>
-                {thead?.map((column, index) => (
-                    <th key={index}>{column}</th>
-                ))}
-            </tr>
-            </thead>
-            {data.map((row, index) => (
-                <Row key={index} {...row} />
-            ))}
+            {children}
         </table>
     );
 }
 
-function Row({ columns, tfoot, }: TableRowData) {
-    if (tfoot) {
-        return (
-            <tfoot>
+Table.Row = ({column , ...props }) => {
+    return (
+                <tbody>
+                    <tr>
+                        {column.map((column) => (
+                            <td>{column}</td>
+                        ))}
+                    </tr>
+                </tbody>
+    );
+};
+
+Table.Header = ({ columns }) => {
+    return (
+        <thead>
+            <tr>
+                {columns.map((column) => (
+                    <th>{column}</th>
+                ))}
+            </tr>
+        </thead>
+    );
+}
+
+Table.Foot = (columns) => {
+    return (
+        <tfoot>
             <tr>
                 {columns.map((column, index) => (
                     <td key={index}>{column}</td>
                 ))}
             </tr>
-            </tfoot>
-        );
-    }
-    return (
-        <tbody>
-        <tr>
-            {columns.map((column, index) => (
-                <td key={index}>{column}</td>
-            ))}
-        </tr>
-        </tbody>
+        </tfoot>
     );
 }

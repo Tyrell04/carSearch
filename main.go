@@ -9,6 +9,7 @@ import (
 	"carSearch/internal/handler/http"
 	"carSearch/internal/repositories/postgres"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"log"
 )
@@ -21,6 +22,7 @@ func main() {
 		Prefork:      false,
 	})
 	app.Use(recover.New())
+	app.Use(cors.New())
 
 	api := app.Group("/api")
 
@@ -44,7 +46,7 @@ func main() {
 	carService := service.NewCarService(carRepo, manuRepo)
 	manufacturerService := service.NewManufactureService(manuRepo)
 	// Routes
-	carHandler := http.NewCarHandler(carService)
+	carHandler := http.NewCarHandler(carService, manufacturerService)
 	manufactureHandler := http.NewManufactureHandler(manufacturerService)
 
 	http.NewHelpHandler().Route(api)

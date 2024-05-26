@@ -5,6 +5,7 @@ import (
 	"carSearch/internal/models"
 	"github.com/gofiber/fiber/v2"
 	"mime/multipart"
+	"strings"
 )
 
 type CarService interface {
@@ -15,6 +16,7 @@ type CarService interface {
 
 type car struct {
 	carService CarService
+	ManufactureService
 }
 
 type Car struct {
@@ -24,13 +26,13 @@ type Car struct {
 	Manufacturer string `json:"manufacturer"`
 }
 
-func NewCarHandler(carService CarService) *car {
-	return &car{carService}
+func NewCarHandler(carService CarService, manufactureService ManufactureService) *car {
+	return &car{carService, manufactureService}
 }
 
 func (handler *car) Route(api fiber.Router) {
 	api.Post("/car", handler.Create)
-	api.Get("/car/:hsn/:tsn", handler.ByHsnTsn)
+	api.Get("/car/", handler.Get)
 	api.Post("/car/csv", handler.CreateFromCSV)
 }
 
@@ -62,25 +64,35 @@ func (handler *car) Create(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Car created successfully"})
 }
 
-// ByHsnTsn
+// Get
 // @Summary Get car by hsn and tsn
 // @Description Get car by hsn and tsn
 // @Tags car
 // @Accept json
 // @Produce json
-// @Param hsn path string true "hsn"
-// @Param tsn path string true "tsn"
-// @Success 200
-// @Router /api/car/{hsn}/{tsn} [get]
-func (handler *car) ByHsnTsn(c *fiber.Ctx) error {
-	hsn := c.Params("hsn")
-	tsn := c.Params("tsn")
-
+// @Param hsn query string true "hsn"
+// @Param tsn query string true "tsn"
+// @Success 200 {object} models.Car
+// @Router /api/car [get]
+func (handler *car) Get(c *fiber.Ctx) error {
+	hsn := c.Query("hsn")
+	tsn := c.Query("tsn")
+	tsn = strings.ToUpper(tsn)
+	if tsn == "" {
+		hersteller, err := handler.ManufactureService.GetByHsn(hsn)
+		if err != nil {
+			exception.Panic(err)
+		}
+		return c.Status(fiber.StatusOK).JSON(models.Car{
+			ManufacturerName: hersteller.Name,
+			Hsn:              hersteller.Hsn,
+		})
+	}
 	car, err := handler.carService.ByHsnTsn(hsn, tsn)
+
 	if err != nil {
 		exception.Panic(err)
 	}
-
 	return c.Status(fiber.StatusOK).JSON(car)
 }
 

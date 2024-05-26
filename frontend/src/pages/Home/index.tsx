@@ -2,10 +2,11 @@ import './style.scss';
 import {Form, InputType} from '../../components/Form';
 import {useState} from "preact/hooks";
 import {carQuery} from "../../lib/api";
+import {Table} from "../../components/Table";
 
 export function Home() {
 
-	const [data, setData] = useState(null);
+	const [data, setData] = useState([]);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -13,7 +14,9 @@ export function Home() {
 		const hsn = formData.get('hsn');
 		const tsn = formData.get('tsn');
 		const response = await carQuery({hsn, tsn});
-		setData(response);
+		console.log(response.name);
+
+		setData(data.concat(response));
 	};
 
 	return (
@@ -27,24 +30,13 @@ export function Home() {
 			<Form.Input type={InputType.TEXT} name="tsn" placeholder="Herstellerschlüsselnummer" />
 			<Form.Submit>Suchen</Form.Submit>
 		</Form>
-		{data && (
-			<table>
-				<thead>
-					<tr>
-						<th>Typenschlüsselnummer</th>
-						<th>Herstellerschlüsselnummer</th>
-						<th>Modell</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{data.hsn}</td>
-						<td>{data.tsn}</td>
-						<td>{data.name}</td>
-					</tr>
-				</tbody>
-			</table>
-		)}
+			<Table>
+				<Table.Header columns={["Autotype", "Hersteller", "Typenschlüsselnummer", "Herstellerschlüsselnummer"]} />
+				{data.map((car) => (
+					<Table.Row column={[car.name, car.manufacturer_name, car.hsn, car.tsn]} />
+				))
+				}
+			</Table>
 		</main>
 	);
 }

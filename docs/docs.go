@@ -16,6 +16,43 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/car": {
+            "get": {
+                "description": "Get car by hsn and tsn",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Get car by hsn and tsn",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "hsn",
+                        "name": "hsn",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tsn",
+                        "name": "tsn",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Car"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a new car",
                 "consumes": [
@@ -102,42 +139,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/api/car/{hsn}/{tsn}": {
-            "get": {
-                "description": "Get car by hsn and tsn",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "car"
-                ],
-                "summary": "Get car by hsn and tsn",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "hsn",
-                        "name": "hsn",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tsn",
-                        "name": "tsn",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -155,6 +156,27 @@ const docTemplate = `{
                 },
                 "tsn": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Car": {
+            "type": "object",
+            "properties": {
+                "hsn": {
+                    "type": "string",
+                    "example": "0001"
+                },
+                "manufacturer_name": {
+                    "type": "string",
+                    "example": "ADLERWERKE"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "M 100"
+                },
+                "tsn": {
+                    "type": "string",
+                    "example": "096"
                 }
             }
         }

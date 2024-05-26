@@ -24,7 +24,7 @@ func (repository *carRepository) Create(car *models.Car) error {
 func (repository *carRepository) ByHsnTsn(hsn, tsn string) (*models.Car, error) {
 	car := &models.Car{}
 
-	err := repository.db.QueryRow("SELECT id, hsn FROM manufacturer WHERE hsn = $1", hsn).Scan(&car.ManufacturerID, &car.Hsn)
+	err := repository.db.QueryRow("SELECT id, hsn, name FROM manufacturer WHERE hsn = $1", hsn).Scan(&car.ManufacturerID, &car.Hsn, &car.ManufacturerName)
 	if err != nil {
 		return nil, err
 	}

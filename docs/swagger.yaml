@@ -10,10 +10,50 @@ definitions:
       tsn:
         type: string
     type: object
+  models.Car:
+    properties:
+      hsn:
+        example: "0001"
+        type: string
+      manufacturer_name:
+        example: ADLERWERKE
+        type: string
+      name:
+        example: M 100
+        type: string
+      tsn:
+        example: "096"
+        type: string
+    type: object
 info:
   contact: {}
 paths:
   /api/car:
+    get:
+      consumes:
+      - application/json
+      description: Get car by hsn and tsn
+      parameters:
+      - description: hsn
+        in: query
+        name: hsn
+        required: true
+        type: string
+      - description: tsn
+        in: query
+        name: tsn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+      summary: Get car by hsn and tsn
+      tags:
+      - car
     post:
       consumes:
       - application/json
@@ -51,30 +91,6 @@ paths:
       summary: Get car by hsn
       tags:
       - manufacturer
-  /api/car/{hsn}/{tsn}:
-    get:
-      consumes:
-      - application/json
-      description: Get car by hsn and tsn
-      parameters:
-      - description: hsn
-        in: path
-        name: hsn
-        required: true
-        type: string
-      - description: tsn
-        in: path
-        name: tsn
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Get car by hsn and tsn
-      tags:
-      - car
   /api/car/csv:
     post:
       consumes:
