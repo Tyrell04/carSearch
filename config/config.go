@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -30,11 +31,13 @@ func Load() *Config {
 	viper.SetDefault("database.path", "carsearch.db")
 	viper.SetDefault("api_key", "default-api-key")
 
-	// Allow environment variables
+	// Allow environment variables without prefix
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
+	// Read config file if available
 	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("No config file found, using defaults: %v", err)
+		log.Printf("No config file found, using defaults and environment variables: %v", err)
 	}
 
 	var cfg Config

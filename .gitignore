@@ -1,3 +1,5 @@
 carsearch.db
 config.yaml
+.env
+!.env.example
 .idea
