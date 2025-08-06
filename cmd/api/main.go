@@ -2,9 +2,11 @@ package main
 
 import (
 	"carSearch/config"
+	"carSearch/frontend"
 	"carSearch/internal/handler"
 	"carSearch/internal/repository"
 	"carSearch/internal/service"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -49,7 +51,7 @@ func main() {
 
 	// Add CORS middleware to allow frontend access
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173,http://localhost:3000,http://localhost:4173", // Common Vite/SvelteKit ports
+		AllowOrigins:     "http://localhost:5173,http://localhost:3000,https://car.marc-schulz.online", // Common Vite/SvelteKit ports
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 		AllowHeaders:     "Origin,Content-Type,Accept,Authorization,X-API-Key",
 		AllowCredentials: true,
@@ -57,13 +59,11 @@ func main() {
 
 	// Register routes
 	handler.RegisterRoutes(app, carHandler)
-
-	// Start server
-	port := cfg.Server.Port
-	if port == "" {
-		port = "3000"
-	}
-
-	log.Printf("Server starting on port %s", port)
-	log.Fatal(app.Listen(":" + port))
+	app.Use("/*", filesystem.New(filesystem.Config{
+		Root:         frontend.Dist(),
+		NotFoundFile: "index.html",
+		Index:        "index.html",
+	}))
+	log.Printf("Server starting on port %s", cfg.Server.Port)
+	log.Fatal(app.Listen(":" + cfg.Server.Port))
 }

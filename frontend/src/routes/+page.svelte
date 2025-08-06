@@ -9,7 +9,9 @@
 	let error = '';
 
 	// Assuming the API runs on the same host but different port or path
-	const API_BASE = 'http://localhost:3000'; // Adjust this to match your Go API
+	// if in dev mode, you might need to adjust this URL in dev localhost:3000 and prod car.marc-schulz.online
+	const isDev = import.meta.env.DEV;
+	const API_BASE = isDev ? 'http://localhost:3000/api' : 'https://car.marc-schulz.online/api';
 
 	async function searchCars() {
 		if (!hsn.trim()) {
