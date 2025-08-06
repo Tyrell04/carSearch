@@ -27,7 +27,11 @@ COPY . .
 # Copy frontend build from previous stage
 COPY --from=frontend-builder /app/dist ./frontend/dist
 
-# Build the Go application
+# Install SQLite dependencies
+RUN apk add --no-cache gcc musl-dev
+
+# Enable CGO and build the Go application
+ENV CGO_ENABLED=1
 RUN go build -o carsearch ./cmd/api/main.go
 
 # Final stage
