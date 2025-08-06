@@ -2,11 +2,13 @@ package internal
 
 import (
 	"carSearch/config"
+	"carSearch/frontend"
 	"carSearch/internal/domain"
 	"carSearch/internal/handler"
 	"carSearch/internal/repository"
 	"carSearch/internal/service"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
@@ -36,6 +38,11 @@ func Start(cfg *config.Config) {
 	// Define routes
 	handler.RegisterRoutes(app, carHandler)
 
+	app.Use("/*", filesystem.New(filesystem.Config{
+		Root:         frontend.Dist(),
+		NotFoundFile: "index.html",
+		Index:        "index.html",
+	}))
 	// Start server
 	log.Fatal(app.Listen(":3000"))
 }

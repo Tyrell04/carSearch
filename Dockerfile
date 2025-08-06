@@ -52,4 +52,4 @@ RUN chmod +x ./carsearch
 EXPOSE 8000
 
 # Command to run the executable
-CMD ["./carsearch"]
+CMD ["/app/carsearch"]
