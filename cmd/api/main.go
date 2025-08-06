@@ -37,6 +37,7 @@ func main() {
 
 	// Create Fiber app
 	app := fiber.New(fiber.Config{
+		StrictRouting: false,
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			code := fiber.StatusInternalServerError
 			if e, ok := err.(*fiber.Error); ok {
@@ -57,8 +58,12 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// Register routes
-	handler.RegisterRoutes(app, carHandler)
+	api := fiber.New(fiber.Config{
+		AppName: "CarSearch API",
+	})
+	// Define routes
+	handler.RegisterRoutes(api, carHandler)
+	app.Mount("/api", api)
 	app.Use("/*", filesystem.New(filesystem.Config{
 		Root:         frontend.Dist(),
 		NotFoundFile: "index.html",
