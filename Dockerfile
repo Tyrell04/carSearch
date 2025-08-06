@@ -28,7 +28,7 @@ COPY . .
 COPY --from=frontend-builder /app/dist ./frontend/dist
 
 # Build the Go application
-RUN go build -o carsearch ./cmd/main.go
+RUN go build -o carsearch ./cmd/api/main.go
 
 # Final stage
 FROM alpine:latest
@@ -39,7 +39,7 @@ WORKDIR /app
 COPY --from=backend-builder /app/carsearch .
 
 # Copy the frontend build directory
-#COPY --from=backend-builder /app/frontend/dist ./frontend/dist
+COPY --from=backend-builder /app/frontend/dist ./frontend/dist
 
 # Set execution permissions
 RUN chmod +x ./carsearch
