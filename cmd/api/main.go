@@ -3,6 +3,7 @@ package main
 import (
 	"carSearch/config"
 	"carSearch/frontend"
+	"carSearch/internal/domain"
 	"carSearch/internal/handler"
 	"carSearch/internal/repository"
 	"carSearch/internal/service"
@@ -24,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
-
+	db.AutoMigrate(domain.Car{}, domain.Producer{})
 	// Initialize repositories
 	carRepo := repository.NewCarRepository(db)
 	producerRepo := repository.NewProducerRepository(db)
