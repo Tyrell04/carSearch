@@ -3,6 +3,7 @@ package handler
 import (
 	"carSearch/internal/service"
 	"github.com/gofiber/fiber/v2"
+	"strings"
 )
 
 type CarHandler struct {
@@ -84,7 +85,7 @@ func (h *CarHandler) FindByHSN(c *fiber.Ctx) error {
 
 func (h *CarHandler) FindByHSNAndTSN(c *fiber.Ctx) error {
 	hsn := c.Params("hsn")
-	tsn := c.Params("tsn")
+	tsn := strings.ToUpper(c.Params("tsn"))
 
 	if hsn == "" || tsn == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
