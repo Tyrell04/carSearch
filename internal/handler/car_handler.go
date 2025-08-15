@@ -111,7 +111,7 @@ func (h *CarHandler) FindByHSNAndTSN(c *fiber.Ctx) error {
 // HSN is mandatory, TSN is optional
 func (h *CarHandler) SearchCars(c *fiber.Ctx) error {
 	hsn := c.Query("hsn")
-	tsn := c.Query("tsn")
+	tsn := strings.ToUpper(c.Params("tsn"))
 
 	if hsn == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
