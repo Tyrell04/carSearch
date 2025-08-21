@@ -55,63 +55,11 @@ func (h *CarHandler) ImportCars(c *fiber.Ctx) error {
 	})
 }
 
-func (h *CarHandler) FindByHSN(c *fiber.Ctx) error {
-	hsn := c.Params("hsn")
-	if hsn == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "HSN parameter is required",
-		})
-	}
-
-	ctx := c.Context()
-	cars, err := h.Service.FindCarsByHSN(ctx, hsn)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Failed to find cars",
-			"error":   err.Error(),
-		})
-	}
-
-	if len(cars) == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "No cars found with the specified HSN",
-		})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"cars": cars,
-	})
-}
-
-func (h *CarHandler) FindByHSNAndTSN(c *fiber.Ctx) error {
-	hsn := c.Params("hsn")
-	tsn := strings.ToUpper(c.Params("tsn"))
-
-	if hsn == "" || tsn == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "HSN and TSN parameters are required",
-		})
-	}
-
-	ctx := c.Context()
-	car, err := h.Service.FindCarByHSNAndTSN(ctx, hsn, tsn)
-	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "Car not found",
-			"error":   err.Error(),
-		})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"car": car,
-	})
-}
-
 // SearchCars handles query parameter based search
 // HSN is mandatory, TSN is optional
 func (h *CarHandler) SearchCars(c *fiber.Ctx) error {
 	hsn := c.Query("hsn")
-	tsn := strings.ToUpper(c.Params("tsn"))
+	tsn := strings.ToUpper(c.Query("tsn"))
 
 	if hsn == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -152,7 +100,5 @@ func (h *CarHandler) SearchCars(c *fiber.Ctx) error {
 // RegisterRoutes registers the API routes for the CarHandler.
 func RegisterRoutes(app *fiber.App, handler *CarHandler) {
 	app.Post("/import-cars", handler.ImportCars)
-	app.Get("/cars/hsn/:hsn", handler.FindByHSN)
-	app.Get("/cars/hsn/:hsn/tsn/:tsn", handler.FindByHSNAndTSN)
 	app.Get("/cars/search", handler.SearchCars) // New query parameter endpoint
 }
