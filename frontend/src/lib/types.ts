@@ -23,3 +23,13 @@ export interface ApiResponse {
 	car?: Car;
 	producer?: Producer;
 }
+
+export interface UserProfile {
+	showSavedCars: boolean;
+	savedCars: Car[];
+	donationBannerDismissed: boolean;
+}
+
+export interface AppState {
+	profile: UserProfile;
+}

@@ -10,7 +10,10 @@ const config = {
 		adapter: adapter({
 			pages: 'dist',
 			assets: 'dist'
-		})
+		}),
+		alias: {
+      		"@/*": "./src/lib/*",
+    	},
 	}
 };
 
